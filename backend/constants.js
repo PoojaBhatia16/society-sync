@@ -1,1 +1,1 @@
-export const DB_NAME=SocietySync;
+export const DB_NAME="SocietySync";
