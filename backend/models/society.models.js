@@ -16,7 +16,7 @@ const societySchema = new Schema(
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", it
+      ref: "User", 
     },
   },
   { timestamps: true }
