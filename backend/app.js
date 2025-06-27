@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.use("/api/v1",userRouter);
+app.use("/api/v1/users",userRouter);
 
 
 
