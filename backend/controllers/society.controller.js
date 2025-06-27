@@ -1,4 +1,4 @@
-import Society from "../models/society.models";
+import {Society} from "../models/society.models.js";
 
 const getAllSocieties = async (req, res) => {
   try {
