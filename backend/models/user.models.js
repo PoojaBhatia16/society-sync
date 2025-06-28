@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["student", "admin"],
+      enum: ["student", "admin", "superadmin"],
       default: "student",
     },
     avatar: {
@@ -29,7 +29,22 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    isVerified: {
+      type: Boolean,
+      default: function () {
+        return this.role !== "admin"; // admin needs manual approval
+      },
+    },
+    pendingSociety: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Society",
+    },
+    adminOf: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Society",
+    },
   },
+
   { timestamps: true }
 );
 
@@ -57,6 +72,7 @@ userSchema.methods.generateAccessToken = function () {
       _id: this._id,
       email: this.email,
       name: this.name,
+      role: this.role,
     },
     process.env.JWT_SECRET,
     {

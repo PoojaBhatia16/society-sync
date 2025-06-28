@@ -5,6 +5,7 @@ import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import bcrypt from "bcrypt";
+import {  Society, } from "../models/society.models.js";
 
 // Cookie options
 const cookieOptions = {
@@ -40,6 +41,25 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existedUser) {
     throw new ApiError(409, "User with email already exists");
   }
+
+
+  let societyId = "";
+  if (role === "admin") {
+    if (req.body.pendingSociety === "") {
+      throw new ApiError(400, "Society Id is required for admin");
+    }
+    const societyInstance = await Society.findById(req.body.pendingSociety);
+    if (!societyInstance) {
+      throw new ApiError(404, "Society not found");
+    }
+    const existingAdmin = await User.findOne({ adminOf: societyInstance._id });
+    if (existingAdmin) {
+      throw new ApiError(409, "Society already has an admin");
+    }
+    societyId = societyInstance._id; 
+  }
+
+  
   
   
   const avatarLocalPath = req.file?.path;
@@ -58,6 +78,9 @@ const registerUser = asyncHandler(async (req, res) => {
     role,
     email,
     password,
+    isVerified: role !== "admin", // Admins need manual approval,
+    ...(role === "admin" && { pendingSociety: societyId }),
+    ...(role === "admin" && { adminOf: societyId }),
   });
 
   const createdUser = await User.findById(user._id).select(
@@ -75,6 +98,8 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
 
+  
+
   if (!email || !password) {
     throw new ApiError(400, "Email and password are required");
   }
@@ -85,7 +110,9 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!userExists) {
     throw new ApiError(400, "User does not exist");
   }
-
+  if (!userExists.isVerified) {
+    throw new ApiError(403, "Admins need superAdmin approval for login");
+  }
   const isCredentialsRight = await userExists.isPasswordCorrect(password);
   // console.log("User password in DB:", userExists.password);
   // console.log("Entered password:", password);

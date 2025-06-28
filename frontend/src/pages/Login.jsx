@@ -2,36 +2,88 @@ import React, { useState } from "react";
 import { loginUser } from "../api/userApi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const handleRegister = () => {
-    navigate("/register");
-  };
 
+const Login = () => {
+  //for handling data 
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    
+  });
+  //for handling errors
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    admin:"",
+    general: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  //functions
+  const handleRegister = () => navigate("/register");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "", general: "" }));
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setErrors({ email: "", password: "", general: "" });
+
+    // Basic validation
+    let isValid = true;
+    const newErrors = { ...errors };
+
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email";
+      isValid = false;
+    }
+
+    
+
+    if (!isValid) {
+      setErrors(newErrors);
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const res = await loginUser({ email, password });
+      const res = await loginUser({
+        email: formData.email,
+        password: formData.password,
+      });
+
       toast.success("Login successful!");
-      // console.log("User data:", res.data.user);
-      // console.log("Access Token:", res.data.accessToken);
-      // console.log("Refresh Token:", res.data.refreshToken);
-      
-      // After successful login
+
+      // Store tokens securely (consider using httpOnly cookies instead)
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      console.log(res);
-      // Redirect to dashboard or home page
-      navigate("/dashboard");
-
       
+      
+      navigate("/dashboard");
     } catch (err) {
-      toast.error(err?.message || "Login failed");
-    }
+      // console.log(err);
+      // console.log(err?.response);
+      // console.log(err?.response?.status);
+      
+      const errorMessage =
+        err?.response?.data?.message || 
+        err?.message || 
+        "Login failed. Please try again."; 
+      setErrors((prev) => ({
+        ...prev,
+        general: errorMessage,
+      }));
+
+      setIsLoading(false);
+      }
+    
+    
   };
 
   return (
@@ -40,40 +92,71 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Login to Your Account
         </h2>
+
+        {/* General error message */}
+        {errors.general && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 text-sm rounded-lg border border-red-200">
+            {errors.general}
+          </div>
+        )}
+
         <form onSubmit={handleLogin} className="space-y-4">
+          {/* Email Field */}
           <div>
             <label className="block mb-1 text-gray-700">Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Enter your email"
-              className="border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-xl px-4 py-2 w-full"
+              className={`border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-xl px-4 py-2 w-full`}
               required
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            )}
           </div>
 
+          {/* Password Field */}
           <div>
             <label className="block mb-1 text-gray-700">Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Enter your password"
-              className="border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-xl px-4 py-2 w-full"
+              className={`border ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-xl px-4 py-2 w-full`}
               required
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            )}
           </div>
+
           <div className="text-sm text-gray-600 mt-2">
-            <button type="button" onClick={handleRegister}>
+            <button
+              type="button"
+              onClick={handleRegister}
+              className="text-blue-500 hover:underline"
+            >
               Don't have an account? Register
             </button>
           </div>
+
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl transition duration-300"
+            disabled={isLoading}
+            className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl transition duration-300 ${
+              isLoading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Login
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>

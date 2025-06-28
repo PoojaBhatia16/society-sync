@@ -7,13 +7,14 @@ const api = axios.create({
 });
 
 // Register new user
-export const registerUser = async ({ name, email, password, role, avatar }) => {
+export const registerUser = async ({ name, email, password, role, avatar, pendingSociety }) => {
   const formData = new FormData();
   formData.append("name", name);
   formData.append("email", email);
   formData.append("password", password);
   formData.append("role", role);
   formData.append("avatar", avatar);
+  formData.append("pendingSociety", pendingSociety);
 
   const res = await api.post("/register", formData, {
     headers: {
