@@ -63,9 +63,11 @@ const Login = () => {
       // Store tokens securely (consider using httpOnly cookies instead)
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       
-      
-      navigate("/dashboard");
+      if (formData.email == "superadmin@cms.com")
+        { navigate("/SuperAdminDashboard");}
+      else{ navigate("/dashboard");}
     } catch (err) {
       // console.log(err);
       // console.log(err?.response);

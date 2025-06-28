@@ -45,6 +45,14 @@ export const getUserProfile = async () => {
   }
 };
 
+export const updateAccountDetails=async({name,email})=>{
+  try {
+    const response = await api.get("/me", { name, email });
+    return response.data;
+  } catch (error) {
+    throw error?.response?.data;
+  }
+}
 // Change password (correct route)
 export const changeUserPassword = async ({ currentPassword, newPassword }) => {
   try {

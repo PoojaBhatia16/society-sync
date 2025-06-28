@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute"; 
 import { Navigate } from "react-router-dom";
+import SuperAdminDashboard from "./pages/SuperAdminDashboard.jsx";
+import Profile from "./pages/Profile";
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,6 +19,22 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/superAdminDashboard"
+          element={
+            <ProtectedRoute>
+             <SuperAdminDashboard/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile/>
             </ProtectedRoute>
           }
         />

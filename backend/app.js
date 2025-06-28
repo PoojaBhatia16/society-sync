@@ -6,6 +6,7 @@ import cors from "cors";
 import userRouter from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import societyRoutes from "./routes/society.routes.js";
+import superAdminRoutes from "./routes/superAdmin.routes.js"
 import {errorHandler} from "./middleware/error.middleware.js";
 app.use(cors(
   {
@@ -22,6 +23,7 @@ app.use(express.static("public"));
 
 app.use("/api/v1/users",userRouter);
 app.use("/api/societies", societyRoutes);
+app.use("/api/superadmin", superAdminRoutes);
 
 app.use(errorHandler);
 

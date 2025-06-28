@@ -112,7 +112,7 @@ const Register = () => {
         pendingSociety:
           formData.role === "admin" ? formData.selectedSociety : "",
       });
-
+      console.log(res);
       toast.success("Registration successful!");
       navigate("/login");
     } catch (err) {
