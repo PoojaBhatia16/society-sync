@@ -1,12 +1,36 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, LogOut } from "lucide-react"; // Lucide icons
 import toast from "react-hot-toast";
 import { logoutUser } from "../api/userApi";
-
+import {getUserProfile} from "../api/userApi";
 const Header = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const [user, setUser] = useState(null);
+    
+  const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      avatar: null,
+    });
+    useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const res = await getUserProfile();
+          setUser(res.data);
+          setFormData({
+            name: res.data.name,
+            email: res.data.email,
+            avatar: res.data.avatar,
+          });
+        } catch (error) {
+          toast.error(error?.message || "Failed to load profile");
+        }
+      };
+      fetchProfile();
+    }, []);
+    
 
   const handleLogout = async() => {
     if (window.confirm("Are you sure you want to logout?")) {
@@ -34,7 +58,7 @@ const Header = () => {
       {/* Right - Avatar + Logout */}
       <div className="flex items-center gap-4">
         <img
-          src={user?.avatar || "/default-avatar.png"}
+          src={formData.avatar || "/default-avatar.png"}
           alt="Avatar"
           className="w-9 h-9 rounded-full border object-cover"
         />

@@ -47,7 +47,7 @@ export const getUserProfile = async () => {
 
 export const updateAccountDetails=async({name,email})=>{
   try {
-    const response = await api.get("/me", { name, email });
+    const response = await api.put("/me", { name, email });
     return response.data;
   } catch (error) {
     throw error?.response?.data;

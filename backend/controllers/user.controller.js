@@ -235,19 +235,28 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
   const { name, email } = req.body;
+  //console.log("running")
 
   if (!name || !email) {
     throw new ApiError(400, "All fields are required");
   }
 
-  await User.findByIdAndUpdate(req.user?._id, {
-    $set: { name, email },
-  });
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: { name, email },
+    },
+    {
+      new: true,
+    }
+  );
 
   const updatedUser = await User.findById(req.user._id).select(
     "-password -refreshToken"
   );
+  //console.log("idhar ");
   if (!updatedUser) {
+    //console.log("idhar bhi");
     throw new ApiError(404, "User not found");
   }
 
