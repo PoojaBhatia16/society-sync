@@ -35,7 +35,7 @@ const Login = () => {
     setIsLoading(true);
     setErrors({ email: "", password: "", general: "" });
 
-    // Basic validation
+    
     let isValid = true;
     const newErrors = { ...errors };
 
@@ -57,17 +57,32 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-
+      console.log("ho gya login");
       toast.success("Login successful!");
 
       // Store tokens securely (consider using httpOnly cookies instead)
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      
-      if (formData.email == "superadmin@cms.com")
-        { navigate("/SuperAdminDashboard");}
-      else{ navigate("/dashboard");}
+     
+      const user=localStorage.getItem("user");
+      console.log(user);
+      const userRole = user.role;
+
+      // Redirect based on role
+      switch (userRole) {
+        case "superadmin":
+          navigate("/superAdminDashboard");
+          break;
+        case "admin":
+          navigate("/dashboard");
+          break;
+        case "student":
+          navigate("/dashboard");
+          break;
+        default:
+          navigate("/");
+      }
     } catch (err) {
       // console.log(err);
       // console.log(err?.response);

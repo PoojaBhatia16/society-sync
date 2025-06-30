@@ -7,6 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { Navigate } from "react-router-dom";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard.jsx";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound.jsx";
+import AdminDashBoard from "./pages/AdminDashBoard.jsx";
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,16 +19,24 @@ const App = () => {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["student"]}>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adminDashboard"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminDashBoard />
             </ProtectedRoute>
           }
         />
         <Route
           path="/superAdminDashboard"
           element={
-            <ProtectedRoute>
-             <SuperAdminDashboard/>
+            <ProtectedRoute allowedRoles={["superadmin"]}>
+              <SuperAdminDashboard />
             </ProtectedRoute>
           }
         />
@@ -34,10 +44,12 @@ const App = () => {
           path="/profile"
           element={
             <ProtectedRoute>
-              <Profile/>
+              <Profile />
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
