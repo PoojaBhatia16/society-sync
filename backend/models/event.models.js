@@ -6,6 +6,8 @@ const eventSchema = new mongoose.Schema(
     description: { type: String },
     date: { type: Date, required: true },
     banner: { type: String },
+    venue: { type: String },
+    society_name:{type:String},
     society: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Society",
@@ -16,5 +18,5 @@ const eventSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Event = mongoose.model("Event", eventSchema);
-export default Event;
+export const Event = mongoose.model("Event", eventSchema);
+

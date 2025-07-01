@@ -57,7 +57,7 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-      console.log("ho gya login");
+     // console.log("ho gya login");
       toast.success("Login successful!");
 
       // Store tokens securely (consider using httpOnly cookies instead)
