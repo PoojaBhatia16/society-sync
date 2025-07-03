@@ -7,7 +7,7 @@ const api = axios.create({
 
 export const getAllSocieties = async () => {
   try {
-    const response = await api.get("/");
+    const response = await api.get("/getAllSocieties");
     return response.data;
   } catch (error) {
     throw error?.response?.data;

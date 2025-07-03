@@ -9,6 +9,11 @@ import SuperAdminDashboard from "./pages/SuperAdminDashboard.jsx";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound.jsx";
 import AdminDashBoard from "./pages/AdminDashBoard.jsx";
+import ExploreSociety from "./pages/ExploreSociety.jsx";
+import UpcomingEvents from "./pages/UpcomingEvents.jsx";
+import PastEvents from "./pages/PastEvents.jsx";
+import Recuritment from "./pages/Recuritment.jsx";
+import Society from "./pages/Society.jsx";
 const App = () => {
   return (
     <BrowserRouter>
@@ -21,6 +26,47 @@ const App = () => {
           element={
             <ProtectedRoute allowedRoles={["student"]}>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/exploreSociety"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <ExploreSociety />
+            </ProtectedRoute>
+          }
+        />
+       
+        <Route
+          path={"/societies/:society_name"}
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <Society />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/upcoming"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <UpcomingEvents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/past"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <PastEvents />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/recuritement"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <Recuritment />
             </ProtectedRoute>
           }
         />
@@ -48,7 +94,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

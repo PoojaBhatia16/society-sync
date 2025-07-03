@@ -7,7 +7,8 @@ import SocietyCard from "../components/SocietyCard";
 import { FiPlus, FiCalendar } from "react-icons/fi";
 
 const AdminDashboard = () => {
-  const [events, setEvents] = useState([]);
+  const [Upcomingevents, setUpcomingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
   const [showEventForm, setShowEventForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -18,7 +19,9 @@ const AdminDashboard = () => {
       setIsLoading(true);
       try {
         const fetchedEvents = await getEvents();
-        setEvents(fetchedEvents.data.events);
+       // console.log(fetchedEvents);
+        setUpcomingEvents(fetchedEvents.data.events);
+        setPastEvents(fetchedEvents.data.past);
       } catch (err) {
         setError(err.message || "Failed to fetch events");
       } finally {
@@ -71,9 +74,9 @@ const AdminDashboard = () => {
           {/* Events Grid */}
           {isLoading ? (
             <div className="text-center py-12">Loading events...</div>
-          ) : events.length > 0 ? (
+          ) : Upcomingevents.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.map((event) => (
+              {Upcomingevents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
@@ -81,6 +84,41 @@ const AdminDashboard = () => {
             <div className="text-center py-12 bg-gray-50 rounded-lg">
               <p className="text-gray-500">
                 No upcoming events. Create your first event!
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Past Events  */}
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mt-4 p-6">
+          {/* Action Bar */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
+              <FiCalendar className="text-purple-500 mr-2" />
+              Past Events
+            </h2>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+
+          {/* Events Grid */}
+          {isLoading ? (
+            <div className="text-center py-12">Loading events...</div>
+          ) : pastEvents.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pastEvents.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-500">
+                No past events.
               </p>
             </div>
           )}

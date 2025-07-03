@@ -45,6 +45,34 @@ export const getUserProfile = async () => {
   }
 };
 
+export const getPast = async () => {
+  try {
+    const response = await api.get("/getAllPast");
+    return response.data;
+  } catch (error) {
+    throw error?.response?.data;
+  }
+};
+
+export const getUpcoming = async () => {
+  try {
+    const response = await api.get("/getAllLatest");
+    return response.data;
+  } catch (error) {
+    throw error?.response?.data;
+  }
+};
+
+export const getEventByName = async (society_name) => {
+  try {
+    //console.log(society_name);
+    
+    const response = await api.get(`/getEventByName/${society_name}`);
+    return response.data;
+  } catch (error) {
+    throw error?.response?.data;
+  }
+};
 export const updateAccountDetails=async({name,email})=>{
   try {
     const response = await api.put("/me", { name, email });

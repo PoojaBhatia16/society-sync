@@ -99,9 +99,9 @@ const SocietyCard = () => {
               Active Society
             </span>
           </div>
-          <button className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity">
+          {/* <button className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity">
             View More <FiArrowRight className="ml-2" />
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

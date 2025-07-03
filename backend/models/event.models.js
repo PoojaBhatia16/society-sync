@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const eventSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -8,6 +9,7 @@ const eventSchema = new mongoose.Schema(
     banner: { type: String },
     venue: { type: String },
     society_name:{type:String},
+    event_happened:{type:Boolean ,default:false},
     society: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Society",
@@ -17,6 +19,8 @@ const eventSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+
 
 export const Event = mongoose.model("Event", eventSchema);
 
