@@ -8,7 +8,11 @@ const recruitmentSchema = new mongoose.Schema(
       required: true,
     },
     isOpen: { type: Boolean, default: false },
-    formLink: { type: String },
+    formTemplate: {
+      // Replace formLink with formTemplate reference
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "FormTemplate",
+    },
     startDate: { type: Date },
     endDate: { type: Date },
   },
