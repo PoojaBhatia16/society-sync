@@ -23,9 +23,22 @@ export const createFormTemplate = async (formData) => {
 
 export const getFormTemplates = async () => {
   try {
-    const response = await api.get("/formTemplate");
+    const response = await api.get("/formTemplate/forms");
     return response.data;
   } catch (error) {
     throw error?.response?.data || { message: "Failed to fetch templates" };
+  }
+};
+
+export const getFormTemplatesById = async (id) => {
+  try {
+    const response = await api.get(`/formTemplate/form/${id}`);
+    return response.data;
+  } catch (error) {
+    throw (
+      error?.response?.data || {
+        message: error.message || "Failed to fetch form template",
+      }
+    );
   }
 };

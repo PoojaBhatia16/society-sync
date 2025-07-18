@@ -87,4 +87,30 @@ const createFormTemplate = asyncHandler(async (req, res) => {
     );
 });
 
-export { createFormTemplate };
+const getFormTemplateById=asyncHandler(async(req,res)=>{
+   const formId = req.params.formId;
+   if(!formId)
+   {
+    throw new ApiError(404, "Id not found");
+   }
+   const getForm=await FormTemplate.findById(formId);
+   if(!getForm)
+   {
+    throw new ApiError(400, "Invalid Id");
+   }
+   return res
+     .status(201)
+     .json(
+       new ApiResponse(201, getForm, "Form template fetched succesfully")
+     );
+
+})
+
+const getFormTemplates = asyncHandler(async (req, res) => {
+  
+  const getForm = await FormTemplate.find();
+  return res
+    .status(201)
+    .json(new ApiResponse(201, getForm, "All Form template fetched succesfully"));
+});
+export { createFormTemplate,getFormTemplateById,getFormTemplates };

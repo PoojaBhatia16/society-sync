@@ -15,7 +15,8 @@ const UpcomingEvents = lazy(() => import("./pages/UpcomingEvents"));
 const PastEvents = lazy(() => import("./pages/PastEvents"));
 const Recuritment = lazy(() => import("./pages/Recuritment"));
 const Society = lazy(() => import("./pages/Society"));
-
+const FormFiller=lazy(()=>import("./components/FormFiller"));
+const ErrorBoundary=lazy(()=>import ("./components/ErrorBoundary"));
 const App = () => {
   return (
     <BrowserRouter>
@@ -63,6 +64,16 @@ const App = () => {
             element={
               <ProtectedRoute allowedRoles={["student"]}>
                 <Recuritment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/recuritement/forms/:id"
+            element={
+              <ProtectedRoute allowedRoles={["student"]}>
+                <ErrorBoundary>
+                  <FormFiller />
+                </ErrorBoundary>
               </ProtectedRoute>
             }
           />
