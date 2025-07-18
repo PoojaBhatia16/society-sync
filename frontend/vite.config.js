@@ -14,6 +14,6 @@ export default defineConfig({
     hmr: {
       clientPort: 5173,
     },
+    historyApiFallback: true,
   },
-  
 });

@@ -3,8 +3,17 @@ import mongoose from "mongoose";
 const formFieldSchema = new mongoose.Schema({
   fieldType: {
     type: String,
-    enum: ["text", "number", "email", "textarea", "select", "checkbox", "radio", "file"],
-    required: true
+    enum: [
+      "text",
+      "number",
+      "email",
+      "textarea",
+      "select",
+      "checkbox",
+      "radio",
+      "file",
+    ],
+    required: true,
   },
   label: { type: String, required: true },
   placeholder: { type: String },
@@ -13,25 +22,28 @@ const formFieldSchema = new mongoose.Schema({
   validation: {
     min: { type: Number },
     max: { type: Number },
-    pattern: { type: String }
-  }
+    pattern: { type: String },
+  },
 });
 
-const formTemplateSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  fields: [formFieldSchema],
-  society: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Society",
-    required: true
+const formTemplateSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String },
+    fields: [formFieldSchema],
+    society: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Society",
+      required: true,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    isActive: { type: Boolean, default: true },
   },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
-  isActive: { type: Boolean, default: true }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 export const FormTemplate = mongoose.model("FormTemplate", formTemplateSchema);
