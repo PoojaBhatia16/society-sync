@@ -42,3 +42,16 @@ export const getFormTemplatesById = async (id) => {
     );
   }
 };
+
+export const getFormTemplatesBySocietyId = async (id) => {
+  try {
+    const response = await api.get(`/formTemplate/formForSociety/${id}`);
+    return response.data;
+  } catch (error) {
+    throw (
+      error?.response?.data || {
+        message: error.message || "Failed to fetch form template",
+      }
+    );
+  }
+};

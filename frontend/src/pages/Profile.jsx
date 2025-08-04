@@ -99,23 +99,32 @@ const Profile = () => {
 
   if (!user)
     return (
-      <div className="flex justify-center items-center min-h-screen bg-zinc-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-zinc-600"></div>
+      <div
+        className="flex justify-center items-center min-h-screen"
+        style={{ backgroundColor: "#F1F6F9" }}
+      >
+        <div
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2"
+          style={{ borderColor: "#394867" }}
+        ></div>
       </div>
     );
 
   return (
     <div
-      className="min-h-screen bg-zinc-50 p-4 md:p-8"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at 10% 20%, rgba(228, 228, 231, 0.8) 0%, rgba(228, 228, 231, 0.5) 90%)",
-      }}
+      className="min-h-screen p-4 md:p-8"
+      style={{ backgroundColor: "#F1F6F9" }}
     >
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-zinc-200">
+        <div
+          className="rounded-xl shadow-lg overflow-hidden"
+          style={{ backgroundColor: "#FFFFFF", borderColor: "#9BA4B5" }}
+        >
           {/* Profile Header */}
-          <div className="bg-gradient-to-r from-zinc-700 to-zinc-800 p-6 text-white">
+          <div
+            className="p-6 text-white"
+            style={{ backgroundColor: "#394867" }}
+          >
             <div className="flex flex-col md:flex-row items-center">
               <div className="relative group mb-4 md:mb-0 md:mr-6">
                 <img
@@ -125,7 +134,8 @@ const Profile = () => {
                 />
                 <button
                   onClick={() => setActiveTab("avatar")}
-                  className="absolute bottom-0 right-0 bg-zinc-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg hover:bg-zinc-700"
+                  className="absolute bottom-0 right-0 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg"
+                  style={{ backgroundColor: "#212A3E", color: "#F1F6F9" }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -142,11 +152,20 @@ const Profile = () => {
                 </button>
               </div>
               <div className="text-center md:text-left">
-                <h1 className="text-2xl md:text-3xl font-bold text-zinc-100">
+                <h1
+                  className="text-2xl md:text-3xl font-bold"
+                  style={{ color: "#F1F6F9" }}
+                >
                   {user.name}
                 </h1>
-                <p className="text-zinc-300">{user.email}</p>
-                <span className="inline-block mt-2 px-3 py-1 bg-zinc-600 bg-opacity-20 rounded-full text-sm font-medium text-zinc-100">
+                <p style={{ color: "#9BA4B5" }}>{user.email}</p>
+                <span
+                  className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium"
+                  style={{
+                    backgroundColor: "rgba(57, 72, 103, 0.2)",
+                    color: "#F1F6F9",
+                  }}
+                >
                   {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                 </span>
               </div>
@@ -154,15 +173,21 @@ const Profile = () => {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="border-b border-zinc-200">
+          <div style={{ borderColor: "#9BA4B5" }}>
             <nav className="flex -mb-px">
               <button
                 onClick={() => setActiveTab("details")}
                 className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
                   activeTab === "details"
-                    ? "border-zinc-600 text-zinc-900"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300"
+                    ? "text-zinc-900"
+                    : "text-zinc-500 hover:text-zinc-700"
                 }`}
+                style={{
+                  borderBottomColor:
+                    activeTab === "details" ? "#394867" : "transparent",
+                  color: activeTab === "details" ? "#212A3E" : "#9BA4B5",
+                  hover: { borderBottomColor: "#9BA4B5" },
+                }}
               >
                 Profile Details
               </button>
@@ -170,9 +195,15 @@ const Profile = () => {
                 onClick={() => setActiveTab("password")}
                 className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
                   activeTab === "password"
-                    ? "border-zinc-600 text-zinc-900"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300"
+                    ? "text-zinc-900"
+                    : "text-zinc-500 hover:text-zinc-700"
                 }`}
+                style={{
+                  borderBottomColor:
+                    activeTab === "password" ? "#394867" : "transparent",
+                  color: activeTab === "password" ? "#212A3E" : "#9BA4B5",
+                  hover: { borderBottomColor: "#9BA4B5" },
+                }}
               >
                 Change Password
               </button>
@@ -180,9 +211,15 @@ const Profile = () => {
                 onClick={() => setActiveTab("avatar")}
                 className={`py-4 px-6 text-center border-b-2 font-medium text-sm ${
                   activeTab === "avatar"
-                    ? "border-zinc-600 text-zinc-900"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300"
+                    ? "text-zinc-900"
+                    : "text-zinc-500 hover:text-zinc-700"
                 }`}
+                style={{
+                  borderBottomColor:
+                    activeTab === "avatar" ? "#394867" : "transparent",
+                  color: activeTab === "avatar" ? "#212A3E" : "#9BA4B5",
+                  hover: { borderBottomColor: "#9BA4B5" },
+                }}
               >
                 Profile Picture
               </button>
@@ -195,7 +232,10 @@ const Profile = () => {
             {activeTab === "details" && (
               <form onSubmit={handleChangeDetails} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  <label
+                    className="block text-sm font-medium mb-1"
+                    style={{ color: "#394867" }}
+                  >
                     Full Name
                   </label>
                   <input
@@ -203,12 +243,22 @@ const Profile = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 transition"
+                    className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:border-zinc-500 transition"
+                    style={{
+                      borderColor: "#9BA4B5",
+                      focus: {
+                        ringColor: "#394867",
+                        borderColor: "#394867",
+                      },
+                    }}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  <label
+                    className="block text-sm font-medium mb-1"
+                    style={{ color: "#394867" }}
+                  >
                     Email Address
                   </label>
                   <input
@@ -216,13 +266,25 @@ const Profile = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 transition"
+                    className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:border-zinc-500 transition"
+                    style={{
+                      borderColor: "#9BA4B5",
+                      focus: {
+                        ringColor: "#394867",
+                        borderColor: "#394867",
+                      },
+                    }}
                     required
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-zinc-700 hover:bg-zinc-800 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow-sm"
+                  className="w-full font-medium py-3 px-4 rounded-lg transition duration-200 shadow-sm"
+                  style={{
+                    backgroundColor: "#394867",
+                    color: "#F1F6F9",
+                    hover: { backgroundColor: "#212A3E" },
+                  }}
                 >
                   Update Profile
                 </button>
@@ -233,7 +295,10 @@ const Profile = () => {
             {activeTab === "password" && (
               <form onSubmit={handleChangePassword} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  <label
+                    className="block text-sm font-medium mb-1"
+                    style={{ color: "#394867" }}
+                  >
                     Current Password
                   </label>
                   <input
@@ -242,12 +307,22 @@ const Profile = () => {
                     value={formData.currentPassword}
                     onChange={handleInputChange}
                     placeholder="Enter your current password"
-                    className="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 transition"
+                    className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:border-zinc-500 transition"
+                    style={{
+                      borderColor: "#9BA4B5",
+                      focus: {
+                        ringColor: "#394867",
+                        borderColor: "#394867",
+                      },
+                    }}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  <label
+                    className="block text-sm font-medium mb-1"
+                    style={{ color: "#394867" }}
+                  >
                     New Password
                   </label>
                   <input
@@ -256,13 +331,25 @@ const Profile = () => {
                     value={formData.newPassword}
                     onChange={handleInputChange}
                     placeholder="Enter your new password"
-                    className="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 transition"
+                    className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:border-zinc-500 transition"
+                    style={{
+                      borderColor: "#9BA4B5",
+                      focus: {
+                        ringColor: "#394867",
+                        borderColor: "#394867",
+                      },
+                    }}
                     required
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-zinc-700 hover:bg-zinc-800 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow-sm"
+                  className="w-full font-medium py-3 px-4 rounded-lg transition duration-200 shadow-sm"
+                  style={{
+                    backgroundColor: "#394867",
+                    color: "#F1F6F9",
+                    hover: { backgroundColor: "#212A3E" },
+                  }}
                 >
                   Change Password
                 </button>
@@ -281,18 +368,29 @@ const Profile = () => {
                     />
                   </div>
                   <div className="w-full">
-                    <label className="block text-sm font-medium text-zinc-700 mb-2">
+                    <label
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: "#394867" }}
+                    >
                       Upload New Profile Picture
                     </label>
                     <div className="flex items-center justify-center w-full">
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-zinc-300 border-dashed rounded-lg cursor-pointer bg-zinc-50 hover:bg-zinc-100 transition">
+                      <label
+                        className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition"
+                        style={{
+                          borderColor: "#9BA4B5",
+                          backgroundColor: "#F1F6F9",
+                          hover: { backgroundColor: "#E4E7EB" },
+                        }}
+                      >
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                           <svg
-                            className="w-10 h-10 mb-3 text-zinc-400"
+                            className="w-10 h-10 mb-3"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"
+                            style={{ color: "#9BA4B5" }}
                           >
                             <path
                               strokeLinecap="round"
@@ -301,13 +399,16 @@ const Profile = () => {
                               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                             ></path>
                           </svg>
-                          <p className="mb-2 text-sm text-zinc-500">
+                          <p
+                            className="mb-2 text-sm"
+                            style={{ color: "#9BA4B5" }}
+                          >
                             <span className="font-semibold">
                               Click to upload
                             </span>{" "}
                             or drag and drop
                           </p>
-                          <p className="text-xs text-zinc-500">
+                          <p className="text-xs" style={{ color: "#9BA4B5" }}>
                             PNG, JPG, JPEG (Max. 5MB)
                           </p>
                         </div>
@@ -325,7 +426,12 @@ const Profile = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-zinc-700 hover:bg-zinc-800 text-white font-medium py-3 px-4 rounded-lg transition duration-200 shadow-sm"
+                  className="w-full font-medium py-3 px-4 rounded-lg transition duration-200 shadow-sm"
+                  style={{
+                    backgroundColor: "#394867",
+                    color: "#F1F6F9",
+                    hover: { backgroundColor: "#212A3E" },
+                  }}
                 >
                   Update Profile Picture
                 </button>

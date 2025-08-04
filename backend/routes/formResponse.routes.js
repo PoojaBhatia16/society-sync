@@ -1,13 +1,19 @@
 import express from "express";
-import { submitResponse } from "../controllers/formResponse.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
-import { authorizeRoles } from "../middleware/role.middleware.js";
+import {
+  submitResponse,
+  getResponsesForSociety,
+  getResponsesForTemplate,
+  exportResponsesToCSV,
+} from "../controllers/formResponse.controller.js";
 
 const router = express.Router();
 
-router.post("/:templateId", verifyJWT, authorizeRoles("student"), submitResponse);
+router.use(verifyJWT);
 
-
-
+router.post("/submit/:templateId", submitResponse);
+router.get("/society/:societyId", getResponsesForSociety);
+router.get("/template/:templateId", getResponsesForTemplate);
+router.get("/export-csv/:templateId", exportResponsesToCSV);
 
 export default router;

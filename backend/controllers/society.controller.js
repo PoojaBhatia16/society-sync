@@ -5,18 +5,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
-// title: { type: String, required: true },
-//     description: { type: String },
-//     date: { type: Date, required: true },
-//     banner: { type: String },
-//     society: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Society",
-//       required: true,
-//     },
-//     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-//   },
-//   { timestamps: true }
 
 function isValidDate(dateString) {
   return !isNaN(new Date(dateString).getTime());

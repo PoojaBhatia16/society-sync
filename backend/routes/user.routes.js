@@ -16,7 +16,7 @@ import { AllLatestEvents, AllPastEvents, deleteEvent, getEventByName } from "../
 import { Router } from "express";
 const userRouter = Router();
 
-userRouter.post("/register",upload.single("avatar"), registerUser);
+userRouter.post("/register", upload.single("avatar"), registerUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/me/current", verifyJWT, getCurrentUser);
 userRouter.put("/me", verifyJWT, updateAccountDetails);

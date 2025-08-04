@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import EventCard from "../components/EventCard";
 import EventForm from "../components/EventForm";
-import { getEvents } from "../api/societyApi";
+import { getEvents} from "../api/societyApi";
+import { getFormTemplatesBySocietyId } from "../api/formTemplateApi";
 import Header from "../components/Header";
 import SocietyCard from "../components/SocietyCard";
-import { FiPlus, FiCalendar } from "react-icons/fi";
+import { FiPlus, FiCalendar, FiFileText, FiDownload } from "react-icons/fi";
 import FormTemplateCreator from "../components/FormTemplateCreator";
+import FormResponsesViewer from "../components/FormResponseViewer";
+
+
 
 const AdminDashboard = () => {
+  
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [showEventForm, setShowEventForm] = useState(false);
@@ -15,28 +20,41 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [showFormTemplateModal, setShowFormTemplateModal] = useState(false);
+  const [showResponsesModal, setShowResponsesModal] = useState(false);
   const [formTemplates, setFormTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
       try {
+        // Fetch events
         const fetchedEvents = await getEvents();
         setUpcomingEvents(fetchedEvents.data.events);
         setPastEvents(fetchedEvents.data.past);
+
+        // Fetch form templates
+        const templates = await getFormTemplatesBySocietyId();
+        console.log(templates);
+        setFormTemplates(templates.data);
       } catch (err) {
-        setError(err.message || "Failed to fetch events");
+        setError(err.message || "Failed to fetch data");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchEvents();
+    fetchData();
   }, [refreshTrigger]);
 
   const handleEventCreated = () => {
     setRefreshTrigger((prev) => prev + 1);
     setShowEventForm(false);
+  };
+
+  const handleViewResponses = (template) => {
+    setSelectedTemplate(template);
+    setShowResponsesModal(true);
   };
 
   return (
@@ -49,6 +67,56 @@ const AdminDashboard = () => {
           <SocietyCard />
         </div>
 
+        {/* Form Templates Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
+              <FiFileText className="text-indigo-500 mr-2" />
+              Form Templates
+            </h2>
+            <button
+              onClick={() => setShowFormTemplateModal(true)}
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center shadow-sm"
+            >
+              <FiPlus className="mr-2" />
+              Create Form Template
+            </button>
+          </div>
+
+          {isLoading ? (
+            <div className="text-center py-12 text-gray-500">
+              Loading form templates...
+            </div>
+          ) : formTemplates.length > 0 ? (
+            <div className="space-y-4">
+              {formTemplates.map((template) => (
+                <div
+                  key={template._id}
+                  className="border border-gray-200 rounded-lg p-4 flex justify-between items-center"
+                >
+                  <div>
+                    <h3 className="font-medium">{template.title}</h3>
+                    <p className="text-sm text-gray-500">
+                      {template.description}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleViewResponses(template)}
+                    className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors flex items-center"
+                  >
+                    <FiDownload className="mr-1" />
+                    View Responses
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-gray-500">No form templates created yet.</p>
+            </div>
+          )}
+        </div>
+
         {/* Events Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
           <div className="flex justify-between items-center mb-6">
@@ -56,32 +124,21 @@ const AdminDashboard = () => {
               <FiCalendar className="text-indigo-500 mr-2" />
               Upcoming Events
             </h2>
-            <div className="flex space-x-3">
-              <button
-                onClick={() => setShowFormTemplateModal(true)}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center shadow-sm"
-              >
-                <FiPlus className="mr-2" />
-                Create Form Template
-              </button>
-              <button
-                onClick={() => setShowEventForm(true)}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center shadow-sm"
-              >
-                <FiPlus className="mr-2" />
-                Create New Event
-              </button>
-            </div>
+            <button
+              onClick={() => setShowEventForm(true)}
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center shadow-sm"
+            >
+              <FiPlus className="mr-2" />
+              Create New Event
+            </button>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg border border-red-100">
               {error}
             </div>
           )}
 
-          {/* Events Grid */}
           {isLoading ? (
             <div className="text-center py-12 text-gray-500">
               Loading events...
@@ -101,7 +158,7 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Past Events */}
+        {/* Past Events Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-6 p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
@@ -110,14 +167,6 @@ const AdminDashboard = () => {
             </h2>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg border border-red-100">
-              {error}
-            </div>
-          )}
-
-          {/* Events Grid */}
           {isLoading ? (
             <div className="text-center py-12 text-gray-500">
               Loading events...
@@ -135,7 +184,7 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Event Form Modal */}
+        {/* Modals */}
         {showEventForm && (
           <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <EventForm
@@ -146,7 +195,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Form Template Modal */}
         {showFormTemplateModal && (
           <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl">
@@ -168,6 +216,25 @@ const AdminDashboard = () => {
                   setShowFormTemplateModal(false);
                 }}
               />
+            </div>
+          </div>
+        )}
+
+        {showResponsesModal && selectedTemplate && (
+          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-xl">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold text-gray-800">
+                  Responses for {selectedTemplate.title}
+                </h3>
+                <button
+                  onClick={() => setShowResponsesModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  &times;
+                </button>
+              </div>
+              <FormResponsesViewer templateId={selectedTemplate._id} />
             </div>
           </div>
         )}

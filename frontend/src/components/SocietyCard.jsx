@@ -42,11 +42,11 @@ const SocietyCard = () => {
   }
 
   return (
-    <div className="w-full bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-md transition-all duration-500 ease-in-out">
+    <div className="w-full bg-blue-100 rounded-xl shadow-md transition-all duration-500 ease-in-out">
       <div className="p-8">
         {/* Header with logo placeholder */}
         <div className="flex items-center mb-6">
-          <div className="bg-gradient-to-r from-purple-400 to-blue-500 p-3 rounded-full mr-4">
+          <div className="bg-zinc-800 p-3 rounded-full mr-4">
             {society.logo ? (
               <img
                 src={society.logo}
@@ -69,10 +69,10 @@ const SocietyCard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Email */}
           <div className="flex items-center">
-            <FiMail className="text-purple-500 mr-2 text-lg" />
+            <FiMail className="text-zinc-900 mr-2 text-lg" />
             <a
               href={`mailto:${society.email}`}
-              className="text-blue-600 hover:underline"
+              className="text-zinc-900 hover:underline"
             >
               {society.email}
             </a>
@@ -80,7 +80,7 @@ const SocietyCard = () => {
 
           {/* Recruitment status */}
           <div className="flex items-center">
-            <FiUsers className="text-purple-500 mr-2 text-lg" />
+            <FiUsers className="text-zinc-900 mr-2 text-lg" />
             <span
               className={
                 society.isRecruitmentOpen ? "text-green-600" : "text-gray-500"
@@ -94,8 +94,8 @@ const SocietyCard = () => {
         {/* Status indicator */}
         <div className="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center">
           <div className="flex items-center">
-            <FiActivity className="text-purple-500 mr-2" />
-            <span className="inline-block px-3 py-1 text-sm font-semibold text-purple-700 bg-purple-100 rounded-full">
+            <FiActivity className="text-zinc-900 mr-2" />
+            <span className="inline-block px-3 py-1 text-sm font-semibold text-zinc-900 bg-purple-100 rounded-full">
               Active Society
             </span>
           </div>

@@ -4,6 +4,7 @@ import { Society } from "../models/society.models.js"; // Add this import
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js"; // Add this import
 import { asyncHandler } from "../utils/asyncHandler.js";
+import mongoose from "mongoose"; // Ensure mongoose is imported
 
 const createFormTemplate = asyncHandler(async (req, res) => {
   const { title, description, fields } = req.body;
@@ -113,4 +114,47 @@ const getFormTemplates = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, getForm, "All Form template fetched succesfully"));
 });
-export { createFormTemplate,getFormTemplateById,getFormTemplates };
+
+const getFormTemplatesBySocietyId = asyncHandler(async (req, res) => {
+ 
+  console.log("Fetching", req.params.societyId);
+  const societyId = new mongoose.Types.ObjectId(req.params.societyId);
+
+  if (!societyId) {
+    throw new ApiError(400, "Society ID is required");
+  }
+
+  
+  if (!mongoose.Types.ObjectId.isValid(societyId)) {
+    throw new ApiError(400, "Invalid Society ID format");
+  }
+
+  try {
+   
+    const formTemplates = await FormTemplate.find({ society: societyId })
+      .select("-__v") 
+      .lean(); 
+
+    if (!formTemplates || formTemplates.length === 0) {
+      return res
+        .status(200)
+        .json(
+          new ApiResponse(200, [], "No form templates found for this society")
+        );
+    }
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          formTemplates,
+          "Form templates fetched successfully"
+        )
+      );
+  } catch (error) {
+    console.error("Error fetching form templates:", error);
+    throw new ApiError(500, "Failed to fetch form templates");
+  }
+});
+export { createFormTemplate,getFormTemplateById,getFormTemplates,getFormTemplatesBySocietyId };

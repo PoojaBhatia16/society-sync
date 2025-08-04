@@ -21,7 +21,14 @@ const EventCard = ({ event }) => {
     event?.banner || "https://via.placeholder.com/800x400?text=Event+Banner";
 
   return (
-    <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 mb-6 bg-white">
+    <div
+      className="rounded-xl overflow-hidden mb-6 transition-all duration-300"
+      style={{
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #9BA4B5",
+        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       {/* Banner Preview (Clickable) */}
       <div
         className="h-48 bg-cover bg-center cursor-pointer relative"
@@ -35,7 +42,10 @@ const EventCard = ({ event }) => {
         aria-expanded={open}
       >
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-          <h5 className="font-bold text-lg mb-1 truncate">
+          <h5
+            className="font-bold text-lg mb-1 truncate"
+            style={{ color: "#F1F6F9" }}
+          >
             {event.title || "Untitled Event"}
           </h5>
           <div className="flex justify-between text-sm">
@@ -51,21 +61,24 @@ const EventCard = ({ event }) => {
       <Collapse in={open}>
         <div id={`event-collapse-${event.id}`}>
           <div className="p-4">
-            <h3 className="text-xl font-bold mb-2">
+            <h3 className="text-xl font-bold mb-2" style={{ color: "#212A3E" }}>
               {event.title || "Untitled Event"}
             </h3>
             {event.societyName && (
-              <p className="text-gray-500 mb-3">{event.societyName}</p>
+              <p className="mb-3" style={{ color: "#394867" }}>
+                {event.societyName}
+              </p>
             )}
 
             <div className="space-y-2 mb-4">
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-gray-500"
+                  className="h-5 w-5 mr-2"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  style={{ color: "#9BA4B5" }}
                 >
                   <path
                     strokeLinecap="round"
@@ -74,15 +87,16 @@ const EventCard = ({ event }) => {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>{formattedDate}</span>
+                <span style={{ color: "#394867" }}>{formattedDate}</span>
               </div>
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-gray-500"
+                  className="h-5 w-5 mr-2"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  style={{ color: "#9BA4B5" }}
                 >
                   <path
                     strokeLinecap="round"
@@ -97,17 +111,28 @@ const EventCard = ({ event }) => {
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                <span>{event.venue || "Venue not specified"}</span>
+                <span style={{ color: "#394867" }}>
+                  {event.venue || "Venue not specified"}
+                </span>
               </div>
             </div>
 
             {event.description && (
-              <p className="text-gray-700 mb-4">{event.description}</p>
+              <p className="mb-4" style={{ color: "#394867" }}>
+                {event.description}
+              </p>
             )}
 
             <div className="flex justify-between">
               <button
-                className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors"
+                className="px-4 py-2 rounded-md transition-colors"
+                style={{
+                  border: "1px solid #394867",
+                  color: "#394867",
+                  hover: {
+                    backgroundColor: "#F1F6F9",
+                  },
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   // Handle registration logic here
@@ -116,7 +141,13 @@ const EventCard = ({ event }) => {
                 Register
               </button>
               <button
-                className="px-4 py-2 text-gray-500 hover:text-gray-700"
+                className="px-4 py-2 transition-colors"
+                style={{
+                  color: "#9BA4B5",
+                  hover: {
+                    color: "#394867",
+                  },
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   setOpen(false);

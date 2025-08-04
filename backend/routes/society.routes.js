@@ -9,8 +9,6 @@ const router = express.Router();
 
 router.get(
   "/getAllSocieties",
-  verifyJWT,
-  authorizeRoles("student"),
   getAllSocieties
 ); 
 router.get("/currentSociety",verifyJWT,authorizeRoles("admin"),getSocietyDetails);

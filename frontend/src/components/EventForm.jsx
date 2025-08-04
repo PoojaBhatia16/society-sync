@@ -105,15 +105,23 @@ const EventForm = ({ onClose, onEventCreated }) => {
     }
   };
 
-  
-
   return (
-    <div className="bg-white rounded-lg p-6 max-w-md mx-auto shadow-lg">
+    <div
+      className="rounded-lg p-6 max-w-md mx-auto"
+      style={{
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #9BA4B5",
+        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800">Create New Event</h2>
+        <h2 className="text-xl font-bold" style={{ color: "#212A3E" }}>
+          Create New Event
+        </h2>
         <button
           onClick={onClose}
-          className="text-gray-500 hover:text-gray-700 text-2xl"
+          className="text-2xl"
+          style={{ color: "#9BA4B5" }}
           disabled={isSubmitting}
         >
           &times;
@@ -121,14 +129,23 @@ const EventForm = ({ onClose, onEventCreated }) => {
       </div>
 
       {error.general && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+        <div
+          className="mb-4 p-2 rounded"
+          style={{
+            backgroundColor: "#F1F6F9",
+            color: "#394867",
+            border: "1px solid #9BA4B5",
+          }}
+        >
           {error.general}
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Event Title *</label>
+          <label className="block mb-1" style={{ color: "#394867" }}>
+            Event Title *
+          </label>
           <input
             type="text"
             name="title"
@@ -136,31 +153,51 @@ const EventForm = ({ onClose, onEventCreated }) => {
             onChange={handleChange}
             className={`w-full p-2 border rounded ${
               error.title ? "border-red-500" : "border-gray-300"
-            } focus:ring-2 focus:ring-blue-200 focus:border-blue-500`}
+            }`}
+            style={{
+              focus: {
+                outline: "2px solid #394867",
+                outlineOffset: "2px",
+              },
+            }}
           />
           {error.title && (
-            <p className="text-red-500 text-sm mt-1">{error.title}</p>
+            <p className="text-sm mt-1" style={{ color: "#EF4444" }}>
+              {error.title}
+            </p>
           )}
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Description *</label>
+          <label className="block mb-1" style={{ color: "#394867" }}>
+            Description *
+          </label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             className={`w-full p-2 border rounded ${
               error.description ? "border-red-500" : "border-gray-300"
-            } focus:ring-2 focus:ring-blue-200 focus:border-blue-500`}
+            }`}
+            style={{
+              focus: {
+                outline: "2px solid #394867",
+                outlineOffset: "2px",
+              },
+            }}
             rows={4}
           />
           {error.description && (
-            <p className="text-red-500 text-sm mt-1">{error.description}</p>
+            <p className="text-sm mt-1" style={{ color: "#EF4444" }}>
+              {error.description}
+            </p>
           )}
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Date & Time *</label>
+          <label className="block mb-1" style={{ color: "#394867" }}>
+            Date & Time *
+          </label>
           <input
             type="datetime-local"
             name="date"
@@ -168,15 +205,25 @@ const EventForm = ({ onClose, onEventCreated }) => {
             onChange={handleChange}
             className={`w-full p-2 border rounded ${
               error.date ? "border-red-500" : "border-gray-300"
-            } focus:ring-2 focus:ring-blue-200 focus:border-blue-500`}
+            }`}
+            style={{
+              focus: {
+                outline: "2px solid #394867",
+                outlineOffset: "2px",
+              },
+            }}
           />
           {error.date && (
-            <p className="text-red-500 text-sm mt-1">{error.date}</p>
+            <p className="text-sm mt-1" style={{ color: "#EF4444" }}>
+              {error.date}
+            </p>
           )}
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Venue *</label>
+          <label className="block mb-1" style={{ color: "#394867" }}>
+            Venue *
+          </label>
           <input
             type="text"
             name="venue"
@@ -184,31 +231,50 @@ const EventForm = ({ onClose, onEventCreated }) => {
             onChange={handleChange}
             className={`w-full p-2 border rounded ${
               error.venue ? "border-red-500" : "border-gray-300"
-            } focus:ring-2 focus:ring-blue-200 focus:border-blue-500`}
+            }`}
+            style={{
+              focus: {
+                outline: "2px solid #394867",
+                outlineOffset: "2px",
+              },
+            }}
           />
           {error.venue && (
-            <p className="text-red-500 text-sm mt-1">{error.venue}</p>
+            <p className="text-sm mt-1" style={{ color: "#EF4444" }}>
+              {error.venue}
+            </p>
           )}
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Banner Image *</label>
+          <label className="block mb-1" style={{ color: "#394867" }}>
+            Banner Image *
+          </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className={`w-full p-2 border rounded file:mr-2 file:py-1 file:px-4 file:border-0 file:bg-blue-50 file:text-blue-700 ${
+            className={`w-full p-2 border rounded file:mr-2 file:py-1 file:px-4 file:border-0 ${
               error.bannerImage ? "border-red-500" : "border-gray-300"
             }`}
+            style={{
+              file: {
+                backgroundColor: "#F1F6F9",
+                color: "#394867",
+              },
+            }}
           />
           {error.bannerImage && (
-            <p className="text-red-500 text-sm mt-1">{error.bannerImage}</p>
+            <p className="text-sm mt-1" style={{ color: "#EF4444" }}>
+              {error.bannerImage}
+            </p>
           )}
           {bannerPreview && (
             <img
               src={bannerPreview}
               alt="Preview"
-              className="mt-2 max-h-40 rounded border border-gray-200"
+              className="mt-2 max-h-40 rounded"
+              style={{ border: "1px solid #9BA4B5" }}
             />
           )}
         </div>
@@ -218,14 +284,34 @@ const EventForm = ({ onClose, onEventCreated }) => {
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+            className="px-4 py-2 rounded"
+            style={{
+              border: "1px solid #9BA4B5",
+              color: "#394867",
+              hover: {
+                backgroundColor: "#F1F6F9",
+              },
+              disabled: {
+                opacity: "0.5",
+              },
+            }}
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 rounded"
+            style={{
+              backgroundColor: "#394867",
+              color: "#F1F6F9",
+              hover: {
+                backgroundColor: "#212A3E",
+              },
+              disabled: {
+                opacity: "0.5",
+              },
+            }}
           >
             {isSubmitting ? "Creating..." : "Create Event"}
           </button>
