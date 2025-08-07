@@ -5,9 +5,15 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const getAllSocieties = async () => {
+export const getAllSocieties = async (page = 1, limit = 6, search = "") => {
   try {
-    const response = await api.get("/getAllSocieties");
+    const response = await api.get("/getAllSocieties", {
+      params: {
+        page,
+        limit,
+        search,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error?.response?.data;

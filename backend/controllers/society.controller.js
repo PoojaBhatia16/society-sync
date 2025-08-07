@@ -10,13 +10,38 @@ function isValidDate(dateString) {
   return !isNaN(new Date(dateString).getTime());
 }
 
+// GET /api/societies?page=1&limit=6&search=tech
 const getAllSocieties = async (req, res) => {
   try {
-    const societies = await Society.find();
-    res.status(200).json(societies);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6;
+    const search = req.query.search || '';
+
+    // Build search query
+    const query = {};
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } }, // Case-insensitive search
+        { description: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Get total count (for pagination)
+    const total = await Society.countDocuments(query);
+
+    // Fetch paginated results
+    const societies = await Society.find(query)
+      .skip((page - 1) * limit) // Skip previous pages
+      .limit(limit); // Limit results per page
+
+    res.json({
+      data: {
+        societies,
+        totalPages: Math.ceil(total / limit) // Calculate total pages
+      }
+    });
   } catch (error) {
-    console.error("Error fetching societies:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Failed to fetch societies" });
   }
 };
 

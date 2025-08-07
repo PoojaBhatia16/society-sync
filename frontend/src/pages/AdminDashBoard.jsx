@@ -9,10 +9,7 @@ import { FiPlus, FiCalendar, FiFileText, FiDownload } from "react-icons/fi";
 import FormTemplateCreator from "../components/FormTemplateCreator";
 import FormResponsesViewer from "../components/FormResponseViewer";
 
-
-
 const AdminDashboard = () => {
-  
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [showEventForm, setShowEventForm] = useState(false);
@@ -23,6 +20,7 @@ const AdminDashboard = () => {
   const [showResponsesModal, setShowResponsesModal] = useState(false);
   const [formTemplates, setFormTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [societyId, setSocietyId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,10 +31,12 @@ const AdminDashboard = () => {
         setUpcomingEvents(fetchedEvents.data.events);
         setPastEvents(fetchedEvents.data.past);
 
-        // Fetch form templates
-        const templates = await getFormTemplatesBySocietyId();
-        console.log(templates);
-        setFormTemplates(templates.data);
+        // Only fetch form templates if we have a society ID
+        if (societyId) {
+          const templates = await getFormTemplatesBySocietyId(societyId);
+          console.log("Fetched form templates:", templates.data);
+          setFormTemplates(templates.data);
+        }
       } catch (err) {
         setError(err.message || "Failed to fetch data");
       } finally {
@@ -45,7 +45,13 @@ const AdminDashboard = () => {
     };
 
     fetchData();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, societyId]);
+
+  const handleSocietyLoaded = (society) => {
+    if (society && society._id) {
+      setSocietyId(society._id);
+    }
+  };
 
   const handleEventCreated = () => {
     setRefreshTrigger((prev) => prev + 1);
@@ -62,9 +68,9 @@ const AdminDashboard = () => {
       <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Society Card Section */}
+        {/* Society Card Section - Pass the onLoad callback */}
         <div className="mb-8">
-          <SocietyCard />
+          <SocietyCard onLoad={handleSocietyLoaded} />
         </div>
 
         {/* Form Templates Section */}

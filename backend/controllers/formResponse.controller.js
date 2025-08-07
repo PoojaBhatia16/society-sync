@@ -2,7 +2,9 @@ import { FormResponse } from "../models/formResponse.model.js";
 import { FormTemplate } from "../models/formTemplate.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { Society } from "../models/society.models.js"; 
 import { ApiResponse } from "../utils/ApiResponse.js";
+import ExcelJS from "exceljs";
 import mongoose from "mongoose";
 const submitResponse = asyncHandler(async (req, res) => {
   const { templateId } = req.params;
@@ -77,80 +79,84 @@ const getResponsesForSociety = asyncHandler(async (req, res) => {
 
 const getResponsesForTemplate = asyncHandler(async (req, res) => {
   const { templateId } = req.params;
+  console.log("Fetching responses for template:", templateId); // Add this
 
   if (!templateId) {
     throw new ApiError(400, "Template ID is required");
   }
 
-  // Verify the requesting user is admin of the society that owns this template
   const template = await FormTemplate.findById(templateId);
+  console.log("Found template:", template); // Add this
   if (!template) {
     throw new ApiError(404, "Template not found");
   }
 
   const society = await Society.findById(template.society);
-  if (!society.admins.includes(req.user._id)) {
+  console.log("Found society:", society); // Add this
+  if (!society.admin.equals(req?.user._id)) {
     throw new ApiError(403, "Unauthorized - Not an admin of this society");
   }
 
-  // Get all responses for this template with populated user data
   const responses = await FormResponse.find({ template: templateId })
     .populate({
       path: "submittedBy",
       select: "username email firstName lastName",
     })
+    .populate({
+      path: "template",
+      select: "title description fields", // Make sure fields are included
+    })
     .sort({ createdAt: -1 });
+
+  // Add template fields to each response for easier frontend processing
+  const responsesWithTemplate = responses.map((r) => ({
+    ...r.toObject(),
+    templateDoc: template, // Include full template data
+  }));
 
   return res
     .status(200)
     .json(
       new ApiResponse(
         200,
-        responses,
+        responsesWithTemplate,
         "Template responses retrieved successfully"
       )
     );
 });
 
+
+// CSV Export
 const exportResponsesToCSV = asyncHandler(async (req, res) => {
   const { templateId } = req.params;
 
-  if (!templateId) {
-    throw new ApiError(400, "Template ID is required");
-  }
-
-  // Verify the requesting user is admin of the society that owns this template
+  // Verify permissions (same as before)
   const template = await FormTemplate.findById(templateId).populate("fields");
-  if (!template) {
-    throw new ApiError(404, "Template not found");
-  }
+  if (!template) throw new ApiError(404, "Template not found");
 
   const society = await Society.findById(template.society);
-  if (!society.admins.includes(req.user._id)) {
-    throw new ApiError(403, "Unauthorized - Not an admin of this society");
-  }
+  if (!society.admin.equals(req.user._id))
+    throw new ApiError(403, "Unauthorized");
 
-  // Get all responses for this template with populated user data
-  const responses = await FormResponse.find({ template: templateId }).populate({
-    path: "submittedBy",
-    select: "username email firstName lastName",
-  });
+  const responses = await FormResponse.find({ template: templateId }).populate(
+    "submittedBy",
+    "email firstName lastName"
+  );
 
-  // Prepare CSV data
+  // CSV Headers
   const headers = [
     "Response ID",
     "Submitted At",
-    "Submitted By (Username)",
-    "Submitted By (Email)",
-    "Submitted By (Name)",
-    ...template.fields.map((field) => field.label),
+    "Email",
+    "Name",
+    ...template.fields.map((f) => f.label),
   ];
 
+  // CSV Rows
   const rows = responses.map((response) => {
     const baseData = [
       response._id,
       response.createdAt.toISOString(),
-      response.submittedBy?.username || "",
       response.submittedBy?.email || "",
       `${response.submittedBy?.firstName || ""} ${
         response.submittedBy?.lastName || ""
@@ -158,37 +164,100 @@ const exportResponsesToCSV = asyncHandler(async (req, res) => {
     ];
 
     const fieldValues = template.fields.map((field) => {
-      const fieldResponse = response.responses.find((r) =>
-        r.fieldId.equals(field._id)
+      const fieldResponse = response.responses.find(
+        (r) => r.fieldId.toString() === field._id.toString()
       );
-      return fieldResponse ? fieldResponse.value : "";
+      // Escape quotes in CSV values
+      return `"${(fieldResponse?.value || "").toString().replace(/"/g, '""')}"`;
     });
 
     return [...baseData, ...fieldValues];
   });
 
-  // Convert to CSV
   const csvContent = [
     headers.join(","),
-    ...rows.map((row) =>
-      row
-        .map((item) =>
-          typeof item === "string" ? `"${item.replace(/"/g, '""')}"` : item
-        )
-        .join(",")
-    ),
+    ...rows.map((row) => row.join(",")),
   ].join("\n");
 
-  // Set response headers for file download
   res.setHeader("Content-Type", "text/csv");
   res.setHeader(
     "Content-Disposition",
-    `attachment; filename=${template.title.replace(/\s+/g, "_")}_responses_${
-      new Date().toISOString().split("T")[0]
-    }.csv`
+    `attachment; filename=${template.title.replace(
+      /[^\w]/g,
+      "_"
+    )}_responses.csv`
+  );
+  res.send(csvContent);
+});
+
+// Excel Export
+const exportResponsesToExcel = asyncHandler(async (req, res) => {
+  const { templateId } = req.params;
+
+  // Same permission checks
+  const template = await FormTemplate.findById(templateId).populate("fields");
+  if (!template) throw new ApiError(404, "Template not found");
+
+  const society = await Society.findById(template.society);
+  if (!society.admin.equals(req.user._id))
+    throw new ApiError(403, "Unauthorized");
+
+  const responses = await FormResponse.find({ template: templateId }).populate(
+    "submittedBy",
+    "email firstName lastName"
   );
 
-  return res.status(200).send(csvContent);
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Responses");
+
+  // Excel Headers
+  worksheet.columns = [
+    { header: "Response ID", key: "id", width: 20 },
+    { header: "Submitted At", key: "createdAt", width: 20 },
+    { header: "Email", key: "email", width: 25 },
+    { header: "Name", key: "name", width: 25 },
+    ...template.fields.map((field) => ({
+      header: field.label,
+      key: field._id.toString(),
+      width: 20,
+    })),
+  ];
+
+  // Excel Rows
+  responses.forEach((response) => {
+    const rowData = {
+      id: response._id.toString(),
+      createdAt: response.createdAt.toISOString(),
+      email: response.submittedBy?.email || "",
+      name: `${response.submittedBy?.firstName || ""} ${
+        response.submittedBy?.lastName || ""
+      }`.trim(),
+    };
+
+    template.fields.forEach((field) => {
+      const fieldResponse = response.responses.find(
+        (r) => r.fieldId.toString() === field._id.toString()
+      );
+      rowData[field._id.toString()] = fieldResponse?.value || "";
+    });
+
+    worksheet.addRow(rowData);
+  });
+
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=${template.title.replace(
+      /[^\w]/g,
+      "_"
+    )}_responses.xlsx`
+  );
+
+  await workbook.xlsx.write(res);
+  res.end();
 });
 
 export {
@@ -196,4 +265,5 @@ export {
   getResponsesForSociety,
   getResponsesForTemplate,
   exportResponsesToCSV,
+  exportResponsesToExcel,
 };

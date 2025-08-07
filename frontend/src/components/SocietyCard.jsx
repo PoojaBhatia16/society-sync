@@ -8,7 +8,7 @@ import {
 } from "react-icons/fi";
 import { getCurrentSociety } from "../api/societyApi";
 
-const SocietyCard = () => {
+const SocietyCard = ({onLoad}) => {
   const [society, setSociety] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,6 +19,11 @@ const SocietyCard = () => {
         const response = await getCurrentSociety();
         setSociety(response.data.society);
         console.log(response.data.society);
+
+        // Call the onLoad callback with the society data
+        if (onLoad) {
+          onLoad(response.data.society);
+        }
       } catch (err) {
         setError(err.message || "Failed to fetch society data");
       } finally {
@@ -27,7 +32,7 @@ const SocietyCard = () => {
     };
 
     fetchSocietyData();
-  }, []);
+  }, [onLoad]); 
 
   if (isLoading) {
     return <div className="text-center py-8">Loading society details...</div>;

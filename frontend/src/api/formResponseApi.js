@@ -48,8 +48,14 @@ export const getResponsesForTemplate = async (templateId) => {
 
 export const exportResponsesToCSV = async (templateId) => {
   const response = await api.get(`/response/export-csv/${templateId}`, {
-    // Changed from `/form-responses/...`
-    responseType: "blob",
+    responseType: 'blob',
   });
-  return response.data;
+  return response;
+};
+
+export const exportResponsesToExcel = async (templateId) => {
+  const response = await api.get(`/response/export-excel/${templateId}`, {
+    responseType: 'blob',
+  });
+  return response;
 };

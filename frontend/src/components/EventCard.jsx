@@ -123,39 +123,7 @@ const EventCard = ({ event }) => {
               </p>
             )}
 
-            <div className="flex justify-between">
-              <button
-                className="px-4 py-2 rounded-md transition-colors"
-                style={{
-                  border: "1px solid #394867",
-                  color: "#394867",
-                  hover: {
-                    backgroundColor: "#F1F6F9",
-                  },
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Handle registration logic here
-                }}
-              >
-                Register
-              </button>
-              <button
-                className="px-4 py-2 transition-colors"
-                style={{
-                  color: "#9BA4B5",
-                  hover: {
-                    color: "#394867",
-                  },
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpen(false);
-                }}
-              >
-                Close
-              </button>
-            </div>
+            
           </div>
         </div>
       </Collapse>
