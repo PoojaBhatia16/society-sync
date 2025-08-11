@@ -1,37 +1,26 @@
 import { useState, useEffect } from 'react';
 import { FaSearch, FaUniversity, FaUsers, FaChevronLeft, FaChevronRight,FaCalendarAlt ,FaBullhorn  } from 'react-icons/fa';
-// Import the API function
 import { getAllSocieties } from '../api/societyApi'; 
 import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
   
-  // State for storing societies data from the API
   const [societies, setSocieties] = useState([]);
-  // State for loading status
   const [loading, setLoading] = useState(true);
-  // State for any errors during fetching
   const [error, setError] = useState(null);
-  // State for the search input
   const [searchQuery, setSearchQuery] = useState('');
 
-  // State for pagination
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 8; // Display 4 societies per page
+  const limit = 8;
 
-  // Use useEffect to fetch data when the component mounts, page changes, or search query changes
   useEffect(() => {
     const fetchSocieties = async () => {
       setLoading(true);
       setError(null);
       try {
-        // Fetch societies with the current page, limit, and search query.
         const response = await getAllSocieties(page, limit, searchQuery); 
         console.log(response);
-        // Correctly set societies and totalPages from the response object
         setSocieties(response.data.societies || []);
         setTotalPages(response.totalPages);
       } catch (err) {
@@ -42,14 +31,12 @@ const LandingPage = () => {
       }
     };
     fetchSocieties();
-  }, [page, searchQuery]); // Re-run the effect when the page or search query changes
+  }, [page, searchQuery]); 
 
-  // Function to handle moving to the next page
   const handleNextPage = () => {
     setPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
 
-  // Function to handle moving to the previous page
   const handlePrevPage = () => {
     setPage(prevPage => Math.max(prevPage - 1, 1));
   };
@@ -57,7 +44,6 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-inter">
-      {/* Navigation */}
       <nav className="bg-blue-800 text-white p-4 ">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -81,7 +67,6 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <div className="bg-blue-700 text-white py-16 rounded-b-lg shadow-xl">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold mb-4">All NIT Bhopal Societies in One Place</h2>
@@ -94,7 +79,7 @@ const LandingPage = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setPage(1); // Reset to the first page on new search
+                setPage(1); 
               }}
               className="w-full p-4 pr-12 rounded-lg text-white font-bold focus:outline-none border border-white"
             />
@@ -103,17 +88,14 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto py-12 px-4">
         <div className="flex justify-between items-center mb-8">
           <h3 className="text-2xl font-bold text-gray-800">Browse Societies</h3>
         </div>
 
-        {/* Conditional rendering based on state */}
         {loading && <p className="text-center text-lg text-gray-600">Loading societies...</p>}
         {error && <p className="text-center text-lg text-red-500">{error}</p>}
         
-        {/* Societies Grid */}
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {societies.length > 0 ? (
@@ -145,7 +127,6 @@ const LandingPage = () => {
           </div>
         )}
         
-        {/* Pagination Controls */}
         {!loading && !error && totalPages > 1 && (
           <div className="flex justify-center items-center space-x-4 mt-8">
             <button
@@ -169,7 +150,6 @@ const LandingPage = () => {
         )}
       </div>
 
-      {/* Features Section */}
       <div className="bg-gray-100 py-12">
         <div className="container mx-auto px-4">
           <h3 className="text-2xl font-bold text-center mb-12 text-gray-800">Why Use Society Sync?</h3>
@@ -195,148 +175,11 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Login Modal */}
-      {showLogin && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-bold text-gray-800">Login</h3>
-                <button 
-                  onClick={() => setShowLogin(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  &times;
-                </button>
-              </div>
-              
-              <form>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Email</label>
-                  <div className="relative">
-                    <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
-                    <input 
-                      type="email" 
-                      className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-gray-700 mb-2">Password</label>
-                  <div className="relative">
-                    <FaLock className="absolute left-3 top-3 text-gray-400" />
-                    <input 
-                      type="password" 
-                      className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-                
-                <button 
-                  type="submit"
-                  className="w-full py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  Login
-                </button>
-              </form>
-              
-              <p className="text-center mt-4 text-gray-600">
-                Don't have an account?{' '}
-                <button 
-                  onClick={() => { setShowLogin(false); setShowSignup(true); }}
-                  className="text-blue-600 hover:underline"
-                >
-                  Sign up
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Signup Modal */}
-      {showSignup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-bold text-gray-800">Create Account</h3>
-                <button 
-                  onClick={() => setShowSignup(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  &times;
-                </button>
-              </div>
-              
-              <form>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Full Name</label>
-                  <div className="relative">
-                    <FaUser className="absolute left-3 top-3 text-gray-400" />
-                    <input 
-                      type="text" 
-                      className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Email</label>
-                  <div className="relative">
-                    <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
-                    <input 
-                      type="email" 
-                      className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-gray-700 mb-2">Password</label>
-                  <div className="relative">
-                    <FaLock className="absolute left-3 top-3 text-gray-400" />
-                    <input 
-                      type="password" 
-                      className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-                
-                <button 
-                  type="submit"
-                  className="w-full py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  Create Account
-                </button>
-              </form>
-              
-              <p className="text-center mt-4 text-gray-600">
-                Already have an account?{' '}
-                <button 
-                  onClick={() => { setShowSignup(false); setShowLogin(true); }}
-                  className="text-blue-600 hover:underline"
-                >
-                  Login
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Footer */}
       <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4 text-center">
-          <p>© 2023 NIT Bhopal - Society Sync. All rights reserved.</p>
+          <p>© 2025  NIT Bhopal - Society Sync. All rights reserved.</p>
           <p className="mt-2 text-gray-400">Connecting students with campus societies</p>
+          <p className="mt-2 text-gray-400">Made by Pooja Bhatia</p>
         </div>
       </footer>
     </div>

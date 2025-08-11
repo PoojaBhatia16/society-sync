@@ -68,7 +68,6 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Right side - User info and logout */}
           <div className="flex items-center space-x-4">
             {formData.name && (
               <span className="hidden md:inline-block text-sm font-medium text-gray-700">

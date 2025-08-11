@@ -38,10 +38,8 @@ const ExploreSociety = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* <Header /> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Bar */}
         <div className="mb-8">
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
@@ -66,7 +64,6 @@ const ExploreSociety = () => {
           </div>
         ) : societies.length > 0 ? (
           <>
-            {/* Society Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {societies.map((society) => (
                 <ExploreSocietyCard
@@ -77,7 +74,6 @@ const ExploreSociety = () => {
               ))}
             </div>
 
-            {/* Pagination */}
             <div className="mt-8 flex justify-center">
               <div className="flex items-center gap-2">
                 <button

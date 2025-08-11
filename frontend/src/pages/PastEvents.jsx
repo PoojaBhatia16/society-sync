@@ -4,8 +4,6 @@ import toast from 'react-hot-toast';
 import EventCard from "../components/EventCard";
 import Pagination from "../utils/Pagination";
 
-// Mock Pagination component for demonstration.
-// You should ensure your actual Pagination component has this functionality.
 const MockPagination = ({ totalPosts, postsPerPage, setCurrentPage, currentPage }) => {
   const totalPages = Math.ceil(totalPosts / postsPerPage);
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -29,8 +27,6 @@ const MockPagination = ({ totalPosts, postsPerPage, setCurrentPage, currentPage 
   );
 };
 
-// Mock EventCard component for demonstration.
-// Replace with your actual component.
 const MockEventCard = ({ event }) => (
   <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
     <img src={event.banner} alt={event.title} className="w-full h-48 object-cover" />
@@ -65,7 +61,6 @@ const PastEvents = () => {
     try {
       const res = await getPast();
       console.log(res.data);
-      // Assuming res.data contains the 'past' array as shown in your console log
       setPastEvents(res.data.past || []);
     } catch (error) {
       toast.error(
@@ -80,7 +75,6 @@ const PastEvents = () => {
     fetchPastEvents();
   }, []);
 
-  // Pagination logic to slice the data for the current page
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = pastEvents.slice(firstPostIndex, lastPostIndex);
@@ -95,14 +89,12 @@ const PastEvents = () => {
           <div className="flex-grow text-center py-12 text-gray-600">Loading past events...</div>
         ) : pastEvents.length > 0 ? (
           <>
-            {/* Events Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {currentPosts.map((event) => (
                 <MockEventCard key={event._id} event={event} />
               ))}
             </div>
 
-            {/* Pagination Controls */}
             <div className="mt-12 flex justify-center">
               <MockPagination
                 totalPosts={pastEvents.length}

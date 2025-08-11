@@ -60,7 +60,6 @@ const Login = () => {
       // console.log("ho gya login");
       toast.success("Login successful!");
 
-      // Store tokens securely (consider using httpOnly cookies instead)
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
       localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -76,7 +75,6 @@ const Login = () => {
         }
       }
       
-      // Redirect based on role
       console.log("User role:", userRole);
       switch (userRole) {
         case "superadmin":
@@ -92,9 +90,7 @@ const Login = () => {
           navigate("/");
       }
     } catch (err) {
-      // console.log(err);
-      // console.log(err?.response);
-      // console.log(err?.response?.status);
+ 
       
       const errorMessage =
         err?.response?.data?.message || 
@@ -118,7 +114,6 @@ const Login = () => {
           Login to Your Account
         </h2>
 
-        {/* General error message */}
         {errors.general && (
           <div className="mb-4 p-3 bg-red-100 text-red-700 text-sm rounded-lg border border-red-200">
             {errors.general}
@@ -126,7 +121,6 @@ const Login = () => {
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* Email Field */}
           <div>
             <label className="block mb-1 text-gray-700">Email</label>
             <input
@@ -145,7 +139,6 @@ const Login = () => {
             )}
           </div>
 
-          {/* Password Field */}
           <div>
             <label className="block mb-1 text-gray-700">Password</label>
             <input
