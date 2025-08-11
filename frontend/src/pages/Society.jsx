@@ -18,6 +18,7 @@ const Society = () => {
     setIsLoading(true);
     try {
       const res = await getEventByName(society_name);
+      console.log(res);
       setSocietyData({
         society: res.data.society,
         events: res.data.events || [],

@@ -4,6 +4,7 @@ import { Society } from "../models/society.models.js";
 import { Event } from "../models/event.models.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
+import { log } from "console";
 
 // Helper function to automatically update event statuses
 const updateEventStatuses = async () => {
@@ -72,20 +73,26 @@ const getEventByName = asyncHandler(async (req, res) => {
   await updateEventStatuses();
 
   const societyName = req?.params?.society_name;
+  console.log("Society Name:", societyName);
   if (!societyName) {
     throw new ApiError(404, "SocietyName not found");
   }
 
-  const society = await Society.findOne({ name: societyName });
+  const society = await Society.findById({ _id: societyName });
+  console.log("Society:", society);
+
   const Upcomingevents = await Event.find({
-    society_name: societyName,
+    society_name: society.name,
     event_happened: false,
   }).sort({ date: 1 });
 
   const pastevents = await Event.find({
-    society_name: societyName,
+    society_name: society.name,
     event_happened: true,
   }).sort({ date: -1 });
+console.log(pastevents);
+console.log(Upcomingevents);
+
 
   return res.status(200).json(
     new ApiResponse(

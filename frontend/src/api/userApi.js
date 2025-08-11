@@ -66,8 +66,10 @@ export const getUpcoming = async () => {
 export const getEventByName = async (society_name) => {
   try {
     //console.log(society_name);
-    
+    console.log(society_name);
+
     const response = await api.get(`/getEventByName/${society_name}`);
+    console.log("cdsvcd",response.data);
     return response.data;
   } catch (error) {
     throw error?.response?.data;

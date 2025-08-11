@@ -1,5 +1,9 @@
 import express from "express";
-import { AddEvents, getAllSocieties, getSocietyDetails } from "../controllers/society.controller.js";
+import {
+  AddEvents,
+  getAllSocieties,
+  getSocietyDetails,
+} from "../controllers/society.controller.js";
 import { authorizeRoles } from "../middleware/role.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
@@ -7,11 +11,13 @@ import { getEventByName, getEvents } from "../controllers/event.controller.js";
 
 const router = express.Router();
 
+router.get("/getAllSocieties", getAllSocieties);
 router.get(
-  "/getAllSocieties",
-  getAllSocieties
-); 
-router.get("/currentSociety",verifyJWT,authorizeRoles("admin"),getSocietyDetails);
+  "/currentSociety",
+  verifyJWT,
+  authorizeRoles("admin"),
+  getSocietyDetails
+);
 router.get(
   "/currentSociety/getEvents",
   verifyJWT,
@@ -26,6 +32,5 @@ router.post(
   upload.single("banner"),
   AddEvents
 );
-
 
 export default router;
