@@ -62,7 +62,7 @@ const Header = () => {
               className="flex items-center cursor-pointer"
               onClick={() => navigate("/dashboard")}
             >
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r text-blue-600  bg-clip-text ">
                 Society Sync
               </span>
             </div>

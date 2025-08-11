@@ -57,25 +57,33 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-     // console.log("ho gya login");
+      // console.log("ho gya login");
       toast.success("Login successful!");
 
       // Store tokens securely (consider using httpOnly cookies instead)
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-     
-      const user=localStorage.getItem("user");
-      console.log(user);
-      const userRole = user.role;
-
+      
+      const userString = localStorage.getItem("user");
+      let userRole = null;
+      if (userString) {
+        try {
+          const userObject = JSON.parse(userString);
+          userRole = userObject.role;
+        } catch (parseError) {
+          console.error("Failed to parse user data from localStorage:", parseError);
+        }
+      }
+      
       // Redirect based on role
+      console.log("User role:", userRole);
       switch (userRole) {
         case "superadmin":
           navigate("/superAdminDashboard");
           break;
         case "admin":
-          navigate("/dashboard");
+          navigate("/adminDashboard");
           break;
         case "student":
           navigate("/dashboard");
@@ -173,7 +181,7 @@ const Login = () => {
               isLoading ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Logging in..." : "Login"} 
           </button>
         </form>
       </div>

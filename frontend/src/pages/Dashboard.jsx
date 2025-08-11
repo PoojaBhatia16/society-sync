@@ -80,8 +80,8 @@ const Dashboard = () => {
         return (
           <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
             <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">Events</h2>
+              <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">Events</h2>
                 <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
                   <button
                     onClick={() => setEventsTab("upcoming")}
@@ -113,8 +113,8 @@ const Dashboard = () => {
                       key={`${event.name}-${event.date}`}
                       className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-all hover:shadow-sm"
                     >
-                      <div className="flex items-start">
-                        <div className="flex-shrink-0 bg-blue-100 text-blue-600 rounded-lg p-3 mr-4">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                        <div className="flex-shrink-0 bg-blue-100 text-blue-600 rounded-lg p-3 mr-4 mb-4 sm:mb-0">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-6 w-6"
@@ -231,11 +231,11 @@ const Dashboard = () => {
                     key={recruitment.id}
                     className="border border-gray-200 rounded-lg p-5 hover:border-blue-300 transition-all hover:shadow-sm"
                   >
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0 bg-blue-100 text-blue-600 rounded-lg p-3 mr-4 text-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                      <div className="flex-shrink-0 bg-blue-100 text-blue-600 rounded-lg p-3 mr-4 mb-4 sm:mb-0 text-xl">
                         {recruitment.logo}
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-semibold text-lg text-gray-800">
                           {recruitment.role}
                         </h3>
@@ -372,20 +372,18 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* <Header /> */}
-
       <div className="container mx-auto px-4 py-8">
         {/* Navigation Tabs */}
-        <div className="flex space-x-2 mb-8">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-8">
           <button
             onClick={() => setActiveSection("events")}
-            className={`px-6 py-3 text-sm font-medium rounded-lg transition-all ${
+            className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-lg transition-all ${
               activeSection === "events"
                 ? "bg-blue-600 text-white shadow-md"
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <div className="flex items-center">
+            <div className="flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"
@@ -405,13 +403,13 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => setActiveSection("recruitments")}
-            className={`px-6 py-3 text-sm font-medium rounded-lg transition-all ${
+            className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-lg transition-all ${
               activeSection === "recruitments"
                 ? "bg-blue-600 text-white shadow-md"
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <div className="flex items-center">
+            <div className="flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"
@@ -431,13 +429,13 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => setActiveSection("explore")}
-            className={`px-6 py-3 text-sm font-medium rounded-lg transition-all ${
+            className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-lg transition-all ${
               activeSection === "explore"
                 ? "bg-blue-600 text-white shadow-md"
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <div className="flex items-center">
+            <div className="flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"
