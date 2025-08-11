@@ -16,7 +16,7 @@ const createSuperAdmin = async () => {
       console.log("Superadmin already exists");
       process.exit(0);
     }
-
+//hey
     const user = await User.create({
       name: "Super Admin",
       email: "superadmin@cms.com",
