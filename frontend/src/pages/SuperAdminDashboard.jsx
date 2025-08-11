@@ -55,7 +55,7 @@ const SuperAdminDashboard = () => {
   return (
     <div className="min-h-screen p-6 bg-gray-100">
       <div className="mb-5">
-        <Header />
+        {/* <Header /> */}
       </div>
       <h1 className="text-2xl font-bold mb-6 text-center">
         Pending Admin Requests

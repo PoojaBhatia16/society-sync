@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Header from "./components/Header";
 
 
 const Login = lazy(() => import("./pages/Login"));
@@ -19,7 +20,9 @@ const FormFiller=lazy(()=>import("./components/FormFiller"));
 const ErrorBoundary=lazy(()=>import ("./components/ErrorBoundary"));
 const App = () => {
   return (
+    <>
     <BrowserRouter>
+    <Header/>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -121,6 +124,8 @@ const App = () => {
         </Routes>
       </Suspense>
     </BrowserRouter>
+        </>
+
   );
 };
 
